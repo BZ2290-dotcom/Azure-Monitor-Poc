@@ -14,3 +14,5 @@ resource "azurerm_resource_group_template_deployment" "logic_app" {
     }
   })
 }
+
+# Triggering workflow test
