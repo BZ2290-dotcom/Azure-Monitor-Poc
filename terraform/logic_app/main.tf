@@ -7,7 +7,10 @@ resource "azurerm_resource_group_template_deployment" "logic_app" {
 
   parameters_content = jsonencode({
     logicAppName = {
-      value = "poc-alert-handler"
+      value = "poc-alert-email"
+    },
+    emailAddress = {
+      value = "bassma.zaki@vodafone.com"  # Replace with your actual email
     }
   })
 }
