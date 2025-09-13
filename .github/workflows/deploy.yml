@@ -17,39 +17,17 @@ jobs:
 
       - name: Print Environment Variables
         env:
-          TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
-          TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
-          TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
         run: |
-          echo "Client ID: $TF_VAR_client_id"
-          echo "Client Secret: $TF_VAR_client_secret"
-          echo "Subscription ID: $TF_VAR_subscription_id"
-          echo "Tenant ID: $TF_VAR_tenant_id"
+          echo "Client ID: $ARM_CLIENT_ID"
+          echo "Client Secret: $ARM_CLIENT_SECRET"
+          echo "Subscription ID: $ARM_SUBSCRIPTION_ID"
+          echo "Tenant ID: $ARM_TENANT_ID"
 
       - name: Terraform Init
         working-directory: ./terraform/log_analytics
         env:
-          TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
-          TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
-          TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
-        run: terraform init
-
-      - name: Terraform Plan
-        working-directory: ./terraform/log_analytics
-        env:
-          TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
-          TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
-          TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
-        run: terraform plan
-
-      - name: Terraform Apply
-        working-directory: ./terraform/log_analytics
-        env:
-          TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
-          TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
-          TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
-        run: terraform apply -auto-approve
+          ARM_CLIENT_ID: ${{
