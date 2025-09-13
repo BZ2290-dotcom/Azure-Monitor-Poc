@@ -9,17 +9,21 @@ jobs:
     name: Deploy Log Analytics
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-      - uses: hashicorp/setup-terraform@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
 
-      - name: Debug Secrets
+      - name: Print Environment Variables
         env:
           TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
+          TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
           TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
         run: |
           echo "Client ID: $TF_VAR_client_id"
+          echo "Client Secret: $TF_VAR_client_secret"
           echo "Subscription ID: $TF_VAR_subscription_id"
           echo "Tenant ID: $TF_VAR_tenant_id"
 
