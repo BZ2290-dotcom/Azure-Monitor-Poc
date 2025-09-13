@@ -12,14 +12,15 @@ jobs:
     - uses: actions/checkout@v3
     - uses: hashicorp/setup-terraform@v2
     - name: Debug Secrets
-  run: |
-    echo "Client ID: $TF_VAR_client_id"
-    echo "Subscription ID: $TF_VAR_subscription_id"
-    echo "Tenant ID: $TF_VAR_tenant_id"
   env:
     TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
     TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
     TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+  run: |
+    echo "Client ID: $TF_VAR_client_id"
+    echo "Subscription ID: $TF_VAR_subscription_id"
+    echo "Tenant ID: $TF_VAR_tenant_id"
+
 
     - name: Terraform Init
       run: terraform init
