@@ -38,4 +38,3 @@ QUERY
 
   enabled = true
 }
-
