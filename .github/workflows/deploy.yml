@@ -13,8 +13,7 @@ jobs:
     - uses: hashicorp/setup-terraform@v2
     - name: Terraform Init
       run: terraform init
-      working-directory: ./terraform/log_analytics
-      
+      working-directory: ./terraform/log_analytics 
  env:
     TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
     TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
