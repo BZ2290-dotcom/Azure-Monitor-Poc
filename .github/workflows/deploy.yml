@@ -42,34 +42,36 @@ jobs:
     needs: deploy-log-analytics
     steps:
     - uses: actions/checkout@v3
+
     - uses: hashicorp/setup-terraform@v2
+
     - name: Terraform Init
+      working-directory: ./terraform/vm
+      env:
+        TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
+        TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
+        TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+        TF_VAR_log_analytics_workspace_id: ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
       run: terraform init
-      working-directory: ./terraform/vm
-      env:
-        TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
-        TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
-        TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
-        TF_VAR_log_analytics_workspace_id: ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
+
     - name: Terraform Plan
+      working-directory: ./terraform/vm
+      env:
+        TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
+        TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
+        TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+        TF_VAR_log_analytics_workspace_id: ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
       run: terraform plan
-      working-directory: ./terraform/vm
-      env:
-        TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
-        TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
-        TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
-        TF_VAR_log_analytics_workspace_id: ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
+
     - name: Terraform Apply
-      run: terraform apply -auto-approve
       working-directory: ./terraform/vm
       env:
         TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
         TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
-        TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
-        TF_VAR_log_analytics_workspace_id: ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
+        
+      run: terraform apply -auto-approve
 
 
 
