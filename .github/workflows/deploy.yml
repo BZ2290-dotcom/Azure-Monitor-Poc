@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy-dcr:
-    name: Deploy DCR
+  associate-dcr:
+    name: Associate DCR with VM
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -13,7 +13,7 @@ jobs:
     - uses: hashicorp/setup-terraform@v2
 
     - name: Terraform Init
-      working-directory: ./terraform/dcr
+      working-directory: ./terraform/dcr_association
       env:
         TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
         TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
@@ -22,7 +22,7 @@ jobs:
       run: terraform init
 
     - name: Terraform Plan
-      working-directory: ./terraform/dcr
+      working-directory: ./terraform/dcr_association
       env:
         TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
         TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
@@ -31,7 +31,7 @@ jobs:
       run: terraform plan
 
     - name: Terraform Apply
-      working-directory: ./terraform/dcr
+      working-directory: ./terraform/dcr_association
       env:
         TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
         TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
