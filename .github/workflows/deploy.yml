@@ -19,6 +19,8 @@ jobs:
         TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
         TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+        TF_VAR_vm_id: ${{ secrets.VM_ID }}
+
       run: terraform init
 
     - name: Terraform Plan
@@ -28,6 +30,8 @@ jobs:
         TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
         TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+        TF_VAR_vm_id: ${{ secrets.VM_ID }}
+
       run: terraform plan
 
     - name: Terraform Apply
@@ -37,4 +41,6 @@ jobs:
         TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
         TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+        TF_VAR_vm_id: ${{ secrets.VM_ID }}
+
       run: terraform apply -auto-approve
