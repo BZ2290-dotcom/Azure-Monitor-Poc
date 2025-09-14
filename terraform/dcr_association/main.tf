@@ -1,8 +1,3 @@
-variable "vm_id" {
-  type        = string
-  description = "The resource ID of the VM to associate with the DCR"
-}
-
 provider "azurerm" {
   features {}
 
