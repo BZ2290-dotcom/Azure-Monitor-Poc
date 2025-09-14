@@ -45,4 +45,27 @@ resource "azurerm_windows_virtual_machine" "vm" {
     version   = "latest"
   }
 }
+resource "azurerm_monitor_diagnostic_setting" "vm_diagnostics" {
+  name                       = "vm-diagnostics"
+  target_resource_id         = azurerm_windows_virtual_machine.vm.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+
+  logs {
+    category = "Administrative"
+    enabled  = true
+    retention_policy {
+      enabled = false
+    }
+  }
+
+  metrics {
+    category = "AllMetrics"
+    enabled  = true
+
+    retention_policy {
+      enabled = false
+    }
+  }
+}
+
 
