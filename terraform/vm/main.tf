@@ -12,10 +12,6 @@ data "azurerm_log_analytics_workspace" "existing" {
   resource_group_name = "poc-monitor-rg"
 }
 
-data "azurerm_log_analytics_workspace_shared_keys" "keys" {
-  workspace_id = data.azurerm_log_analytics_workspace.existing.id
-}
-
 resource "azurerm_virtual_network" "vnet" {
   name                = "poc-vnet"
   address_space       = ["10.0.0.0/16"]
@@ -77,6 +73,6 @@ resource "azurerm_virtual_machine_extension" "log_analytics_agent" {
   })
 
   protected_settings = jsonencode({
-    workspaceKey = data.azurerm_log_analytics_workspace_shared_keys.keys.primary_shared_key
+    workspaceKey = var.log_analytics_workspace_key
   })
 }
