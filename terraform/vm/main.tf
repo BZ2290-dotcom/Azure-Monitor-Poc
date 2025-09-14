@@ -1,3 +1,13 @@
+provider "azurerm" {
+  features {}
+
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  subscription_id = var.subscription_id
+  tenant_id       = var.tenant_id
+}
+
+
 resource "azurerm_virtual_network" "vnet" {
   name                = "poc-vnet"
   address_space       = ["10.0.0.0/16"]
