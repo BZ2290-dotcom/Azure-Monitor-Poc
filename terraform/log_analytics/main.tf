@@ -7,18 +7,14 @@ provider "azurerm" {
   tenant_id       = var.tenant_id
 }
 
-
-
-
-resource "azurerm_resource_group" "rg" {
-  name     = "poc-monitor-rg"
-  location = "East US"
-}
-
-resource "azurerm_log_analytics_workspace" "law" {
+resource "azurerm_log_analytics_workspace" "workspace" {
   name                = "poc-law"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = "East US"
+  resource_group_name = "poc-monitor-rg"  # Reference existing RG
   sku                 = "PerGB2018"
   retention_in_days   = 30
+}
+
+output "workspace_id" {
+  value = azurerm_log_analytics_workspace.workspace.id
 }
