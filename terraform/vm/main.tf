@@ -7,6 +7,14 @@ provider "azurerm" {
   tenant_id       = var.tenant_id
 }
 
+data "azurerm_log_analytics_workspace" "existing" {
+  name                = "poc-law"
+  resource_group_name = "poc-monitor-rg"
+}
+
+data "azurerm_log_analytics_workspace_shared_keys" "keys" {
+  workspace_id = data.azurerm_log_analytics_workspace.existing.id
+}
 
 resource "azurerm_virtual_network" "vnet" {
   name                = "poc-vnet"
@@ -55,26 +63,20 @@ resource "azurerm_windows_virtual_machine" "vm" {
     version   = "latest"
   }
 }
-resource "azurerm_monitor_diagnostic_setting" "vm_diagnostics" {
-  name                       = "vm-diagnostics"
-  target_resource_id         = azurerm_windows_virtual_machine.vm.id
-  log_analytics_workspace_id = var.log_analytics_workspace_id
 
-  log {
-    category = "Administrative"
-    enabled  = true
+resource "azurerm_virtual_machine_extension" "log_analytics_agent" {
+  name                       = "LogAnalyticsAgent"
+  virtual_machine_id         = azurerm_windows_virtual_machine.vm.id
+  publisher                  = "Microsoft.EnterpriseCloud.Monitoring"
+  type                       = "MicrosoftMonitoringAgent"
+  type_handler_version       = "1.0"
+  auto_upgrade_minor_version = true
 
-    retention_policy {
-      enabled = false
-    }
-  }
+  settings = jsonencode({
+    workspaceId = data.azurerm_log_analytics_workspace.existing.workspace_id
+  })
 
-  metric {
-    category = "AllMetrics"
-    enabled  = true
-
-    retention_policy {
-      enabled = false
-    }
-  }
+  protected_settings = jsonencode({
+    workspaceKey = data.azurerm_log_analytics_workspace_shared_keys.keys.primary_shared_key
+  })
 }
