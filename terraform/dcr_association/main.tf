@@ -1,3 +1,8 @@
+variable "vm_id" {
+  type        = string
+  description = "The resource ID of the VM to associate with the DCR"
+}
+
 provider "azurerm" {
   features {}
 
@@ -12,14 +17,9 @@ data "azurerm_monitor_data_collection_rule" "dcr" {
   resource_group_name = "poc-monitor-rg"
 }
 
-data "azurerm_windows_virtual_machine" "vm" {
-  name                = "poc-vm"
-  resource_group_name = "poc-monitor-rg"
-}
-
 resource "azurerm_monitor_data_collection_rule_association" "vm_dcr_association" {
   name                        = "poc-dcr-association"
-  target_resource_id          = data.azurerm_windows_virtual_machine.vm.id
+  target_resource_id          = var.vm_id
   data_collection_rule_id     = data.azurerm_monitor_data_collection_rule.dcr.id
   description                 = "Associates VM with DCR for performance monitoring"
 }
