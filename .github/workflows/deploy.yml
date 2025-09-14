@@ -9,46 +9,74 @@ jobs:
     name: Deploy Log Analytics
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v3
+    - uses: hashicorp/setup-terraform@v2
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./terraform/log_analytics
+      env:
+        TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
+        TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
+        TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+    - name: Terraform Plan
+      run: terraform plan
+      working-directory: ./terraform/log_analytics
+      env:
+        TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
+        TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
+        TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      working-directory: ./terraform/log_analytics
+      env:
+        TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
+        TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
+        TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+  deploy-vm:
+    name: Deploy VM
+    runs-on: ubuntu-latest
+    needs: deploy-log-analytics
+    steps:
+    - uses: actions/checkout@v3
+    - uses: hashicorp/setup-terraform@v2
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./terraform/vm
+      env:
+        TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
+        TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
+        TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+        TF_VAR_log_analytics_workspace_id: ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
+    - name: Terraform Plan
+      run: terraform plan
+      working-directory: ./terraform/vm
+      env:
+        TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
+        TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
+        TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+        TF_VAR_log_analytics_workspace_id: ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      working-directory: ./terraform/vm
+      env:
+        TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
+        TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
+        TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+        TF_VAR_log_analytics_workspace_id: ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
 
-      - name: Print Environment Variables
-        env:
-          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        run: |
-          echo "Client ID: $ARM_CLIENT_ID"
-          echo "Client Secret: $ARM_CLIENT_SECRET"
-          echo "Subscription ID: $ARM_SUBSCRIPTION_ID"
-          echo "Tenant ID: $ARM_TENANT_ID"
 
-      - name: Terraform Init
-        working-directory: ./terraform/log_analytics
-        env:
-          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        run: terraform init
 
-      - name: Terraform Plan
-        working-directory: ./terraform/log_analytics
-        env:
-          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        run: terraform plan
-      - name: Terraform Apply
-        working-directory: ./terraform/log_analytics
-        env:
-          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        run: terraform apply -auto-approve
+
+
+
+        
+        TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID }}
+        TF_VAR_log_analytics_workspace_id: ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
